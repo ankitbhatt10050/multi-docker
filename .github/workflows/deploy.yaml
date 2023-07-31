@@ -1,4 +1,4 @@
-name: Deploy Frontend
+name: Deploy multi
 on:
   push:
     branches:
