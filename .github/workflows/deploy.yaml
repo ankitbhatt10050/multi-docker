@@ -1,8 +1,8 @@
-name: Deploy MultiDocker
+name: Deploy Frontend
 on:
   push:
     branches:
-      - master # check your repo, your default branch might be master!
+      - master
 
 jobs:
   build:
@@ -12,19 +12,15 @@ jobs:
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - run: docker build -t ankit/react-test -f ./client/Dockerfile.dev ./client
       - run: docker run -e CI=true ankit/react-test npm test
-      - name: Generate separate builds
-      - run: docker build -t ankit/multi-client ./client
-      - name: Build nginx
-      - run: docker build -t ankit/multi-nginx ./nginx
-      - name: Build server
-      - run: docker build -t ankit/multi-server ./server
-      - name: Build worker
-      - run: docker build -t ankit/multi-worker ./worker
 
-      - run: docker push cygnetops/multi-client
-      - run: docker push cygnetops/multi-nginx
-      - run: docker push cygnetops/multi-server
-      - run: docker push cygnetops/multi-worker
+      - name: Generate separate builds
+        run: docker build -t ankit/multi-client ./client
+      - name: Build server
+        run: docker build -t ankit/multi-server ./server
+      - name: Build worker
+        run: docker build -t ankit/multi-worker ./worker
+      - name: Build nginx
+        run: docker build -t ankit/multi-nginx ./nginx
 
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
@@ -34,8 +30,8 @@ jobs:
       #   with:
       #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
       #     aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-      #     application_name: multi-gh
-      #     environment_name: Multigh-env
+      #     application_name: docker-gh
+      #     environment_name: Dockergh-env
       #     existing_bucket_name: elasticbeanstalk-us-east-1-923445559289
       #     region: us-east-1
       #     version_label: ${{ github.sha }}
