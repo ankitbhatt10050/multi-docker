@@ -22,6 +22,11 @@ jobs:
       - name: Build nginx
         run: docker build -t ankit/multi-nginx ./nginx
 
+      - run: docker push ankit/multi-client
+      - run: docker push ankit/multi-nginx
+      - run: docker push ankit/multi-server
+      - run: docker push ankit/multi-worker
+
       - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
 
